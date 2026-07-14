@@ -1,0 +1,1 @@
+<x-dynamic-component component="gsmui::templates.team-1" :attributes="$attributes" />

@@ -1,0 +1,1 @@
+<x-dynamic-component component="gsmui::templates.hero-sections-1" :attributes="$attributes" />

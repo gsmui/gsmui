@@ -1,0 +1,1 @@
+<x-dynamic-component component="gsmui::templates.real-estate-1" :attributes="$attributes" />

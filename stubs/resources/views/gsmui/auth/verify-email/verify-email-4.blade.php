@@ -1,0 +1,36 @@
+@props([
+    'title' => 'Verify your email',
+    'subtitle' => 'We sent a verification link to your email address. Please check your inbox.',
+    'action' => '#',
+    'method' => 'POST',
+    'name' => null,
+    'logo' => null,
+])
+
+<div {{ $attributes->class('flex min-h-screen items-center justify-center bg-zinc-950 p-4') }}>
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-zinc-800/50 via-zinc-950 to-zinc-950" aria-hidden="true"></div>
+
+    <div class="relative w-full max-w-md">
+        <gsmui:auth.header :$name :$logo />
+
+        <div class="rounded-2xl border border-zinc-800 bg-zinc-900 p-6 sm:p-8 shadow-2xl">
+            <div class="text-center">
+                <div class="mx-auto flex size-12 items-center justify-center rounded-full bg-zinc-800">
+                    <svg class="size-12 text-blue-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" /><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75l2.25 2.25L15 9.75" /></svg>
+                </div>
+                <gsmui:heading size="xl" level="1" class="mt-4 text-white">{{ $title }}</gsmui:heading>
+                <gsmui:text class="mt-2 text-zinc-400">{{ $subtitle }}</gsmui:text>
+            </div>
+
+            <form method="{{ $method }}" action="{{ $action }}" class="mt-6 space-y-4">
+                <gsmui:button variant="outline" type="submit" class="w-full">{{ __('Resend verification email') }}</gsmui:button>
+            </form>
+
+            <p class="mt-6 text-center text-sm text-zinc-400">
+                <a href="#" class="font-medium text-blue-400 hover:underline">{{ __('Back to sign in') }}</a>
+            </p>
+        </div>
+
+        <gsmui:auth.footer />
+    </div>
+</div>

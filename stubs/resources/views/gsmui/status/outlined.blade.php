@@ -1,0 +1,32 @@
+@props([
+    'label' => 'Outlined',
+    'color' => 'blue',
+    'size' => 'md',
+])
+
+@php
+$colors = [
+    'blue' => 'border-blue-500 text-blue-600 dark:text-blue-400',
+    'green' => 'border-green-500 text-green-600 dark:text-green-400',
+    'red' => 'border-red-500 text-red-600 dark:text-red-400',
+    'yellow' => 'border-yellow-500 text-yellow-600 dark:text-yellow-400',
+    'purple' => 'border-purple-500 text-purple-600 dark:text-purple-400',
+    'zinc' => 'border-zinc-400 text-zinc-600 dark:text-zinc-400',
+];
+$colorClass = $colors[$color] ?? $colors['blue'];
+
+$sizes = [
+    'sm' => 'px-2 py-0.5 text-xs',
+    'md' => 'px-2.5 py-1 text-sm',
+    'lg' => 'px-3 py-1.5 text-base',
+];
+$sizeClass = $sizes[$size] ?? $sizes['md'];
+@endphp
+
+<span {{ $attributes->class([
+    'inline-flex items-center font-medium rounded-md border',
+    $colorClass,
+    $sizeClass,
+]) }}>
+    {{ $label }}
+</span>

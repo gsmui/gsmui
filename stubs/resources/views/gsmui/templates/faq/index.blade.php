@@ -1,0 +1,1 @@
+<x-dynamic-component component="gsmui::templates.faq-1" :attributes="$attributes" />

@@ -1,0 +1,1 @@
+<x-dynamic-component component="gsmui::templates.app-landing-1" :attributes="$attributes" />
