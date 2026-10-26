@@ -14,6 +14,27 @@ use Orchestra\Testbench\TestCase;
  */
 class RenderSmokeTest extends TestCase
 {
+    /**
+     * Minimal realistic markup per component.
+     *
+     * A bare `<x-gsmui::name />` measures almost nothing: an undeclared variable
+     * like `$collapsed` only surfaces once the prop is actually optional-and-read,
+     * and a component that requires content fails for the wrong reason. These
+     * supply the smallest valid usage so a pass means "renders as used".
+     *
+     * Only add an entry when the bare tag genuinely fails. The default stays the
+     * bare tag so the sweep keeps measuring the minimum.
+     */
+    private static function markup(string $name): string
+    {
+        return match ($name) {
+            'menu' => '<x-gsmui::menu><x-gsmui::menu.item>Item</x-gsmui::menu.item></x-gsmui::menu>',
+            'tooltip' => '<x-gsmui::tooltip content="Tip"><button type="button">Hover</button></x-gsmui::tooltip>',
+            'with-field' => '<x-gsmui::with-field label="Email"><input type="text" /></x-gsmui::with-field>',
+            default => '<x-gsmui::' . $name . ' />',
+        };
+    }
+
     protected function getPackageProviders($app): array
     {
         return [GsmuiProServiceProvider::class];
@@ -113,7 +134,7 @@ class RenderSmokeTest extends TestCase
             }
 
             try {
-                $html = \Illuminate\Support\Facades\Blade::render('<x-gsmui::' . $name . ' />');
+                $html = \Illuminate\Support\Facades\Blade::render(self::markup($name));
                 $results[$name] = trim($html) !== '' ? 'pass' : 'fail';
             } catch (\Throwable $e) {
                 $results[$name] = 'fail';

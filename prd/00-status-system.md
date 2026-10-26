@@ -59,7 +59,7 @@ regenerate. This is the whole point: the ledger cannot drift from reality.
 ## Why `unknown` is the default
 
 An unaudited component is not "probably fine". Of the 151 components with an
-`index.blade.php`, 128 render and 11 do not; 12 are gallery pages that embed
+`index.blade.php`, 131 render and 9 do not; 13 are gallery pages that embed
 every sibling variant and cannot be rendered as a unit. Assuming the best
 without a test is exactly the reasoning that produced an empty MVP directory.
 
@@ -67,26 +67,32 @@ without a test is exactly the reasoning that produced an empty MVP directory.
 
 | Status | Count |
 |---|---:|
-| ✅ shipped | 88 |
-| 🟡 partial | 52 |
+| ✅ shipped | 90 |
+| 🟡 partial | 50 |
 | ❓ unknown | 13 |
 
-Of the 153 components, 129 render and 11 do not; 13 are gallery pages that embed
+Of the 153 components, 131 render and 9 do not; 13 are gallery pages that embed
 every sibling variant and cannot be rendered as a unit.
 
-The gap between 88 and the 129 that render is structural flags — inline styles,
+The gap between 90 and the 131 that render is structural flags — inline styles,
 `route()` calls, `pluck()` misuse. Those components work but violate stated house
 rules, so they stay 🟡 until the flags clear. This distinction is the ledger's
 main value: "renders" and "meets the house standard" are different claims, and
 only the second one earns ✅.
 
-## From 0 to 88, measured
+## From 0 to 90, measured
 
 The starting state of this repository had no way to answer the status question at
 all. Establishing the sweep immediately corrected a pessimistic guess: a static
 audit had suggested 97 of 151 components were broken. The measured figure was 47.
 The difference was one missing facade alias, which failed every component that
 touched `Gsmui::classes()` — a single line that looked like 47 bugs.
+
+The remaining 9 failures collapse into two causes: 4 Blade syntax errors
+(`combobox`, `datagrid`, `form-builder`, `scheduler`) and 5 components that read a
+variable or slot property that nothing guarantees (`menu`, `modal`, `sidebar`,
+`table`, `tooltip`). `input` was in the second group and is fixed: it read
+`$slot->icon` in an expression where `||` bound tighter than `??`.
 
 That pattern held: 34 measured failures collapsed into 6 root causes, and after
 fixing those causes the remaining failures collapsed into 2. Failures cluster.

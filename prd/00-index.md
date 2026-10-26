@@ -19,7 +19,7 @@ how much trust they carry, not by topic.
 
 ### `spec/` — the canonical specification
 
-**461 files, topics 05–40.** The plan for what gsmui is and will be: system
+**446 files, topics 05–40.** The plan for what gsmui is and will be: system
 architecture, database design, backend and frontend architecture, auth,
 permissions, billing, subscriptions, components, and the downstream products
 (docs engine, marketplace, playground, MCP, CMS, search, admin).
@@ -53,14 +53,15 @@ end-user documentation (URLs like `/docs/components/forms/input`), not as a plan
 
 ### `archive/` — superseded, kept for provenance
 
-**10 files.** Top-level documents from the old layout, plus the two July 2026
-PRD audits.
+**25 files in 2 folders.** Top-level documents from the old layout, the two July 2026 PRD audits, and the merged additions.
 
 - `0.md` — the original table of contents for `gsmui-prd/`. Superseded by this file.
 - `01-vision.md`, `02-market-analysis.md`, `03-brand-guidelines.md`, `04-product-roadmap.md` — 105–140 KB each, from the old flat layout.
 - `component-builder.md` — the standalone component-builder prompt (from `prompts/`).
 - `Untitled-1.md` — a backlog.
 - `prd-audit-report.json`, `prd-audit-final.json` — from 2026-07-15/16. They score `overall_score: 83` across **62 files**, and audit **5**. They describe a docs tree that no longer exists, so their numbers must not be quoted.
+- `count_lines.ps1` — a one-off that hardcoded `gsmui-prd/09-authentication/`. Dead since the move.
+- `merged-additions/` — 15 `05.xx-addition.md` drafts, 377 KB. Each was verified already merged into its target in `spec/05-system-architecture/` (by matching section heading), so they are duplicates, not pending work.
 
 Nothing in `archive/` should be treated as current.
 

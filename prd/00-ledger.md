@@ -35,8 +35,8 @@ Render-smoke source: `tests/render-smoke-results.json` (153 components tested).
 
 | Status | Count |
 |---|---:|
-| ✅ shipped | 88 |
-| 🟡 partial | 52 |
+| ✅ shipped | 90 |
+| 🟡 partial | 50 |
 | 🚧 in-progress | 0 |
 | 📋 planned | 0 |
 | 💡 proposed | 0 |
@@ -53,7 +53,7 @@ failing components. Ordered by blast radius.
 
 | Cause | Description | Components | Count |
 |---|---|---|---:|
-| **F4** | Uses a variable/prop it never declared | `input`, `menu`, `modal`, `sidebar`, `table`, `tooltip`, `with-field` | 7 |
+| **F4** | Uses a variable/prop it never declared | `menu`, `modal`, `sidebar`, `table`, `tooltip` | 5 |
 | **F5** | PHP/Blade syntax error | `combobox`, `datagrid`, `form-builder`, `scheduler` | 4 |
 
 Each cause is one change repeated across components, not N independent bugs.
@@ -183,7 +183,7 @@ Calls `route()` on a hardcoded name — throws unless the host app defines that 
 | `icon` | `gsmui:icon` | ✅ shipped | render-smoke pass, no flags | 17 | 3 | yes |
 | `image-gallery` | `gsmui:image-gallery` | ❓ unknown | gallery page — not unit-testable | 81 | 1 | — |
 | `indicator` | `gsmui:indicator` | ✅ shipped | render-smoke pass, no flags | 1 | 9 | yes |
-| `input` | `gsmui:input` | 🟡 partial | F4 — Uses a variable/prop it never declared | 1 | 17 | yes |
+| `input` | `gsmui:input` | ✅ shipped | render-smoke pass, no flags | 1 | 17 | yes |
 | `jobs` | `gsmui:jobs` | 🟡 partial | renders, but has flags: inline_style | 1 | 4 | yes |
 | `json-viewer` | `gsmui:json-viewer` | ✅ shipped | render-smoke pass, no flags | 1 | 8 | yes |
 | `kanban` | `gsmui:kanban` | ✅ shipped | render-smoke pass, no flags | 6 | 2 | yes |
@@ -259,5 +259,5 @@ Calls `route()` on a hardcoded name — throws unless the host app defines that 
 | `webhooks` | `gsmui:webhooks` | ✅ shipped | render-smoke pass, no flags | 1 | 3 | yes |
 | `whiteboard` | `gsmui:whiteboard` | 🟡 partial | renders, but has flags: inline_style | 1 | 4 | yes |
 | `window` | `gsmui:window` | 🟡 partial | renders, but has flags: inline_style | 3 | 5 | yes |
-| `with-field` | `gsmui:with-field` | 🟡 partial | F4 — Uses a variable/prop it never declared | 1 | 13 | yes |
+| `with-field` | `gsmui:with-field` | ✅ shipped | render-smoke pass, no flags | 1 | 13 | yes |
 | `workflow-designer` | `gsmui:workflow-designer` | 🟡 partial | renders, but has flags: inline_style | 1 | 7 | yes |

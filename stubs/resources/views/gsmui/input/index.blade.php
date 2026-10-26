@@ -60,8 +60,12 @@ $inputClasses = Gsmui::classes()
     ;
 
 $isPassword = $type === 'password';
-$hasIconLeading = $icon || $slot->icon ?? $slot->iconLeading ?? false;
-$hasIconTrailing = $iconTrailing || $slot->iconTrailing ?? $clearable || $copyable || ($isPassword && $viewable) || $kbd;
+
+// `??` binds looser than `||`, so `$icon || $slot->icon ?? ...` evaluates
+// `$slot->icon` unguarded and throws when the slot has no such property.
+$hasIconLeading = (bool) ($icon ?? $slot->icon ?? $slot->iconLeading ?? false);
+$hasIconTrailing = (bool) ($iconTrailing ?? $slot->iconTrailing ?? false)
+    || $clearable || $copyable || ($isPassword && $viewable) || (bool) $kbd;
 
 if ($hasIconLeading) {
     $classes = $classes->add('ps-0');
