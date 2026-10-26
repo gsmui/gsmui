@@ -44,7 +44,7 @@ $modalName = $name ?: 'modal-' . str()->random(6);
 @endphp
 
 <div
-    x-data="{ open: false, name: '{{ $modalName }}' }"
+    x-data="{ open: false, name: '{{ $modalName }}', fullScreen: {{ $fullScreen ?? false }} }"
     x-show="open"
     x-cloak
     @keydown.escape.window="open = false"
@@ -54,7 +54,7 @@ $modalName = $name ?: 'modal-' . str()->random(6);
         <div class="{{ $overlayClasses }}" x-show="open" x-transition.opacity @if ($dismissible) @click="open = false" @endif></div>
 
         <div
-            class="{{ $panelClasses }}"
+            class="{{ $panelClasses }} h-full w-full {{ $fullScreen ? 'rounded-none' : '' }} max-h-[100vh] max-w-[100vw] p-0"
             x-show="open"
             @click.stop
             @if ($isFlyout)

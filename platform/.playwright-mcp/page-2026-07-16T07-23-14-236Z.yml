@@ -1,0 +1,45 @@
+- generic [ref=f2e2]:
+  - navigation [ref=f2e3]:
+    - generic [ref=f2e5]:
+      - link "GsmUi" [ref=f2e7] [cursor=pointer]:
+        - /url: http://127.0.0.1:8000
+      - generic [ref=f2e8]:
+        - link "Components" [ref=f2e9] [cursor=pointer]:
+          - /url: http://127.0.0.1:8000/components
+        - link "Docs" [ref=f2e10] [cursor=pointer]:
+          - /url: http://127.0.0.1:8000/docs
+  - main [ref=f2e11]:
+    - generic [ref=f2e13]:
+      - generic [ref=f2e14]:
+        - heading "Build with GsmUi" [level=1] [ref=f2e15]
+        - paragraph [ref=f2e16]: A complete UI component library for Livewire. 200+ premium components with dark mode, CSP support, and comprehensive theming.
+        - generic [ref=f2e17]:
+          - link "Browse Components" [ref=f2e18] [cursor=pointer]:
+            - /url: http://127.0.0.1:8000/components
+          - link "Documentation" [ref=f2e19] [cursor=pointer]:
+            - /url: http://127.0.0.1:8000/docs
+      - generic [ref=f2e20]:
+        - generic [ref=f2e21]:
+          - generic [ref=f2e22]: 200+
+          - generic [ref=f2e23]: Components
+        - generic [ref=f2e24]:
+          - generic [ref=f2e25]: 50+
+          - generic [ref=f2e26]: Themes
+        - generic [ref=f2e27]:
+          - generic [ref=f2e28]: 10K+
+          - generic [ref=f2e29]: Downloads
+      - generic [ref=f2e30]:
+        - heading "Why GsmUi?" [level=2] [ref=f2e31]
+        - generic [ref=f2e32]:
+          - generic [ref=f2e37]:
+            - heading "Built for Livewire" [level=3] [ref=f2e38]
+            - paragraph [ref=f2e39]: Native Livewire components with full PHP support.
+          - generic [ref=f2e44]:
+            - heading "Dark Mode" [level=3] [ref=f2e45]
+            - paragraph [ref=f2e46]: Beautiful dark mode support out of the box.
+          - generic [ref=f2e51]:
+            - heading "CSP Support" [level=3] [ref=f2e52]
+            - paragraph [ref=f2e53]: Full Content Security Policy support.
+          - generic [ref=f2e58]:
+            - heading "Comprehensive Theming" [level=3] [ref=f2e59]
+            - paragraph [ref=f2e60]: Customize every aspect with CSS variables.

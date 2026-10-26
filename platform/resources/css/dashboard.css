@@ -1,0 +1,216 @@
+/*
+ * GsmUi Dashboard Styles
+ * Extends the base app.css with user dashboard-specific styles
+ */
+
+@import './app.css';
+
+/* Dashboard Grid */
+.dashboard-grid {
+    display: grid;
+    gap: 1.5rem;
+}
+
+@media (min-width: 1024px) {
+    .dashboard-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* Dashboard Card */
+.dashboard-card {
+    background-color: rgb(var(--gsm-background));
+    border: 1px solid rgb(var(--gsm-border));
+    border-radius: var(--gsm-radius-xl);
+    padding: 1.5rem;
+}
+
+.dashboard-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.dashboard-card-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: rgb(var(--gsm-foreground));
+}
+
+/* Project Card */
+.project-card {
+    background-color: rgb(var(--gsm-background));
+    border: 1px solid rgb(var(--gsm-border));
+    border-radius: var(--gsm-radius-xl);
+    overflow: hidden;
+    transition: all 0.15s ease;
+}
+
+.project-card:hover {
+    border-color: rgb(var(--gsm-primary));
+    box-shadow: var(--gsm-shadow-md);
+}
+
+.project-card-preview {
+    height: 12rem;
+    background-color: rgb(var(--gsm-surface));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.project-card-content {
+    padding: 1rem;
+}
+
+.project-card-title {
+    font-weight: 600;
+    color: rgb(var(--gsm-foreground));
+}
+
+.project-card-description {
+    font-size: 0.875rem;
+    color: rgb(var(--gsm-muted));
+    margin-top: 0.25rem;
+}
+
+.project-card-meta {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 0.75rem;
+    font-size: 0.75rem;
+    color: rgb(var(--gsm-muted));
+}
+
+/* Subscription Card */
+.subscription-card {
+    background: linear-gradient(135deg, rgb(var(--gsm-primary)) 0%, rgb(var(--gsm-primary-hover)) 100%);
+    border-radius: var(--gsm-radius-xl);
+    padding: 1.5rem;
+    color: white;
+}
+
+.subscription-card-title {
+    font-size: 0.875rem;
+    font-weight: 500;
+    opacity: 0.9;
+}
+
+.subscription-card-plan {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-top: 0.5rem;
+}
+
+.subscription-card-date {
+    font-size: 0.875rem;
+    opacity: 0.8;
+    margin-top: 0.5rem;
+}
+
+/* API Key Card */
+.api-key-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background-color: rgb(var(--gsm-surface));
+    border: 1px solid rgb(var(--gsm-border));
+    border-radius: var(--gsm-radius-lg);
+}
+
+.api-key-value {
+    font-family: var(--gsm-font-mono);
+    font-size: 0.875rem;
+    color: rgb(var(--gsm-foreground));
+}
+
+.api-key-meta {
+    font-size: 0.75rem;
+    color: rgb(var(--gsm-muted));
+}
+
+/* Activity Feed */
+.activity-feed {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.activity-item {
+    display: flex;
+    gap: 1rem;
+    padding: 0.75rem;
+    border-radius: var(--gsm-radius-lg);
+    transition: background-color 0.15s ease;
+}
+
+.activity-item:hover {
+    background-color: rgb(var(--gsm-surface));
+}
+
+.activity-icon {
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: rgb(var(--gsm-primary) / 0.1);
+    color: rgb(var(--gsm-primary));
+    flex-shrink: 0;
+}
+
+.activity-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.activity-title {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: rgb(var(--gsm-foreground));
+}
+
+.activity-time {
+    font-size: 0.75rem;
+    color: rgb(var(--gsm-muted));
+    margin-top: 0.125rem;
+}
+
+/* Empty State */
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem;
+    text-align: center;
+}
+
+.empty-state-icon {
+    width: 4rem;
+    height: 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: rgb(var(--gsm-surface));
+    color: rgb(var(--gsm-muted));
+    margin-bottom: 1rem;
+}
+
+.empty-state-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: rgb(var(--gsm-foreground));
+}
+
+.empty-state-description {
+    font-size: 0.875rem;
+    color: rgb(var(--gsm-muted));
+    margin-top: 0.5rem;
+    max-width: 24rem;
+}

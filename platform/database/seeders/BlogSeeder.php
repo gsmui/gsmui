@@ -1,0 +1,66 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Database\Seeders;
+
+use App\Models\Post;
+use App\Models\PostCategory;
+use App\Models\User;
+use Illuminate\Database\Seeder;
+
+class BlogSeeder extends Seeder
+{
+    public function run(): void
+    {
+        $authorId = User::first()->id;
+
+        $categories = [
+            ['name' => 'Tutorials', 'slug' => 'tutorials', 'description' => 'Step-by-step guides for building with GsmUi.', 'sort_order' => 1],
+            ['name' => 'Release Notes', 'slug' => 'release-notes', 'description' => 'Announcements for new versions and features.', 'sort_order' => 2],
+            ['name' => 'Best Practices', 'slug' => 'best-practices', 'description' => 'Tips and patterns for building better interfaces.', 'sort_order' => 3],
+            ['name' => 'Community', 'slug' => 'community', 'description' => 'Stories and projects from the GsmUi community.', 'sort_order' => 4],
+            ['name' => 'Design', 'slug' => 'design', 'description' => 'UI/UX design principles and implementation guides.', 'sort_order' => 5],
+        ];
+
+        foreach ($categories as $category) {
+            PostCategory::create($category);
+        }
+
+        $posts = [
+            ['title' => 'Getting Started with GsmUi: A Complete Guide', 'slug' => 'getting-started-gsmui-complete-guide', 'body' => "GsmUi is a comprehensive Livewire component library designed for Laravel developers who want to build beautiful, accessible interfaces without leaving their stack.\n\n## Installation\n\nGetting started is straightforward. Install the package via Composer and publish the configuration:\n\n```bash\ncomposer require gsmui/gsmui-pro\nphp artisan vendor:publish --tag=gsmui-pro-config\n```\n\n## Your First Component\n\nAdd a button to any Blade view:\n\n```html\n<x-gsmui-button variant=\"primary\">Get Started</x-gsmui-button>\n```\n\nThat's it. The component renders with proper accessibility attributes, focus management, and responsive styling out of the box.\n\n## Configuration\n\nGsmUi ships with sensible defaults. You can customize the design system by publishing the CSS variables and tailwind config.\n\n## What's Next\n\nExplore the component library, check out the templates, or join our community Discord.", 'excerpt' => 'Everything you need to know to install GsmUi and build your first interface.', 'category_id' => 1, 'status' => 'published', 'published_at' => now()->subDays(2), 'views_count' => 4521, 'is_featured' => true, 'author_id' => $authorId, 'tags' => ['tutorial', 'beginner', 'installation']],
+
+            ['title' => 'Introducing GsmUi v2.0: The Major Update', 'slug' => 'introducing-gsmui-v2', 'body' => "We are thrilled to announce the release of GsmUi v2.0, our biggest update yet.\n\n## What's New\n\n- **50+ new components** including Command Palette, Tree View, and Date Range Picker\n- **Performance improvements** with lazy loading and tree-shaking support\n- **Accessibility overhaul** with full WCAG 2.1 AA compliance\n- **Theme system** with CSS custom properties and design tokens\n\n## Breaking Changes\n\nWe've streamlined the API surface. Check the migration guide for upgrade instructions.\n\n## Upgrading\n\n```bash\ncomposer require gsmui/gsmui-pro:^2.0\nphp artisan gsmui:migrate\n```", 'excerpt' => 'GsmUi v2.0 brings 50+ new components, accessibility improvements, and a powerful theme system.', 'category_id' => 2, 'status' => 'published', 'published_at' => now()->subWeek(), 'views_count' => 8934, 'is_featured' => true, 'author_id' => $authorId, 'tags' => ['release', 'announcement', 'v2']],
+
+            ['title' => 'Building Accessible Forms with GsmUi', 'slug' => 'building-accessible-forms-gsmui', 'body' => "Accessibility should be a first-class concern in every web application. Here's how GsmUi makes it effortless.\n\n## Label Association\n\nEvery form component automatically associates labels with inputs:\n\n```html\n<x-gsmui-input label=\"Email\" wire:model=\"email\" />\n```\n\n## Error Handling\n\nValidation errors are announced to screen readers automatically.\n\n## Keyboard Navigation\n\nAll interactive components support full keyboard navigation following WAI-ARIA patterns.\n\n## Focus Management\n\nDialog and modal components trap focus and restore it when closed.", 'excerpt' => 'Learn how GsmUi handles labels, validation, keyboard navigation, and focus management.', 'category_id' => 3, 'status' => 'published', 'published_at' => now()->subDays(5), 'views_count' => 3267, 'author_id' => $authorId, 'tags' => ['accessibility', 'forms', 'a11y']],
+
+            ['title' => 'How We Built a SaaS with GsmUi in 2 Weeks', 'slug' => 'built-saas-gsmui-2-weeks', 'body' => "Our community member Sarah Chen shares her experience building a complete SaaS product using GsmUi templates and components.\n\n## The Idea\n\nA project management tool for small creative teams.\n\n## The Stack\n\n- Laravel 11\n- Livewire 3\n- GsmUi Pro\n- Tailwind CSS\n\n## The Result\n\nA fully functional SaaS with authentication, billing, dashboards, and team management. Shipped in under 2 weeks.", 'excerpt' => 'Community spotlight: How Sarah Chen built a complete SaaS product with GsmUi in just 2 weeks.', 'category_id' => 4, 'status' => 'published', 'published_at' => now()->subDays(10), 'views_count' => 6543, 'is_featured' => true, 'author_id' => $authorId, 'tags' => ['community', 'saas', 'case-study']],
+
+            ['title' => 'Design Tokens: The Foundation of Consistent UI', 'slug' => 'design-tokens-consistent-ui', 'body' => "Design tokens are the atomic values that define your visual language. GsmUi's theme system is built on them.\n\n## What Are Tokens?\n\nColors, spacing, typography, and radii defined as named variables.\n\n## Using Tokens in GsmUi\n\n```php\nGsmui::classes()\n    ->get('button')\n    ->add('bg-primary')\n```", 'excerpt' => 'Understanding how design tokens power the GsmUi theme system for consistent interfaces.', 'category_id' => 5, 'status' => 'published', 'published_at' => now()->subDays(14), 'views_count' => 2890, 'author_id' => $authorId, 'tags' => ['design', 'tokens', 'theming']],
+
+            ['title' => 'Livewire 3 and GsmUi: Perfect Together', 'slug' => 'livewire-3-gsmui-perfect-together', 'body' => "GsmUi is built from the ground up for Livewire 3. Here's why that matters.\n\n## Reactive Components\n\nGsmUi components wire directly to Livewire properties.\n\n## Server-Driven UI\n\nAll state lives on the server. No JavaScript hydration surprises.\n\n## Scalable\n\nComponents lazy-load by default for optimal performance.", 'excerpt' => 'Why GsmUi and Livewire 3 are the ideal combination for modern Laravel applications.', 'category_id' => 3, 'status' => 'published', 'published_at' => now()->subDays(18), 'views_count' => 5678, 'author_id' => $authorId, 'tags' => ['livewire', 'integration', 'performance']],
+
+            ['title' => 'Creating Custom Themes for GsmUi', 'slug' => 'creating-custom-themes-gsmui', 'body' => "GsmUi's theme system makes it easy to create custom visual styles.\n\n## Theme Structure\n\nA theme is a set of CSS custom properties and design tokens.\n\n## Building a Theme\n\n```css\n:root {\n    --gsmui-color-primary: #6366f1;\n    --gsmui-font-sans: 'Inter', sans-serif;\n}\n```\n\n## Publishing to Marketplace\n\nShare your themes with the community.", 'excerpt' => 'A step-by-step guide to creating and publishing custom GsmUi themes.', 'category_id' => 1, 'status' => 'published', 'published_at' => now()->subDays(21), 'views_count' => 3456, 'author_id' => $authorId, 'tags' => ['theming', 'customization', 'marketplace']],
+
+            ['title' => 'GsmUi Pro vs Free: What You Get', 'slug' => 'gsmui-pro-vs-free-comparison', 'body' => "GsmUi comes in two editions. Here's a detailed comparison.\n\n## Free Edition\n\n- 30+ core components\n- Basic theming\n- Community support\n\n## Pro Edition\n\n- 100+ components\n- Advanced theming\n- Priority support\n- Templates and starter kits\n- Regular updates", 'excerpt' => 'A detailed comparison of GsmUi Free and Pro editions.', 'category_id' => 2, 'status' => 'published', 'published_at' => now()->subDays(25), 'views_count' => 7890, 'author_id' => $authorId, 'tags' => ['comparison', 'pricing', 'pro']],
+
+            ['title' => 'Data Table Deep Dive: Sorting, Filtering, Export', 'slug' => 'data-table-deep-dive', 'body' => "The GsmUi Data Table component is one of our most powerful components.\n\n## Features\n\n- Server-side sorting and filtering\n- Row selection and bulk actions\n- CSV and PDF export\n- Responsive design\n\n## Usage\n\n```html\n<x-gsmui-data-table :data=\"$users\" :columns=\"$columns\" />\n```", 'excerpt' => 'Master the GsmUi Data Table with sorting, filtering, pagination, and export capabilities.', 'category_id' => 1, 'status' => 'published', 'published_at' => now()->subDays(30), 'views_count' => 4123, 'author_id' => $authorId, 'tags' => ['data-table', 'tutorial', 'components']],
+
+            ['title' => 'Performance Tips for Large Livewire Applications', 'slug' => 'performance-tips-large-livewire-apps', 'body' => "Building large applications with Livewire and GsmUi? Here are optimization strategies.\n\n## Lazy Loading\n\nGsmUi components support lazy loading by default.\n\n## Wire:model Debouncing\n\nDebounce input updates to reduce server round-trips.\n\n## Component Caching\n\nUse Livewire's caching with GsmUi's reactive components.", 'excerpt' => 'Optimize your Livewire and GsmUi applications for scale with these proven techniques.', 'category_id' => 3, 'status' => 'published', 'published_at' => now()->subDays(35), 'views_count' => 5432, 'author_id' => $authorId, 'tags' => ['performance', 'optimization', 'scale']],
+
+            ['title' => 'Showcase: 10 Amazing Projects Built with GsmUi', 'slug' => 'showcase-10-amazing-projects-gsmui', 'body' => "The GsmUi community is building incredible things. Here are 10 standout projects.\n\n1. TaskFlow - Project management for remote teams\n2. InvoiceCraft - Invoicing for freelancers\n3. LearnHub - Online course platform\n4. EventBrite Clone - Event ticketing\n5. RealEstate Pro - Property listings", 'excerpt' => 'Discover 10 inspiring projects built by the GsmUi community.', 'category_id' => 4, 'status' => 'published', 'published_at' => now()->subDays(40), 'views_count' => 9876, 'author_id' => $authorId, 'tags' => ['showcase', 'community', 'inspiration']],
+
+            ['title' => 'The Art of Micro-Interactions in Web UI', 'slug' => 'art-micro-interactions-web-ui', 'body' => "Micro-interactions make interfaces feel alive. Here's how to add them with GsmUi.\n\n## What Are Micro-Interactions?\n\nSmall, purposeful animations that provide feedback.\n\n## Examples in GsmUi\n\n- Button hover states\n- Loading spinners\n- Toast notifications\n- Progress indicators", 'excerpt' => 'Learn how subtle animations and feedback create delightful user experiences.', 'category_id' => 5, 'status' => 'published', 'published_at' => now()->subDays(45), 'views_count' => 3654, 'author_id' => $authorId, 'tags' => ['design', 'animation', 'ux']],
+
+            ['title' => 'GsmUi and Tailwind CSS: Advanced Customization', 'slug' => 'gsmui-tailwind-advanced-customization', 'body' => "GsmUi's integration with Tailwind CSS goes deep.\n\n## Class Merging\n\nUse Gsmui::classes() to extend component styling.\n\n## Dark Mode\n\nBuilt-in dark mode support with system preference detection.\n\n## Custom Variants\n\nCreate your own Tailwind variants for GsmUi components.", 'excerpt' => 'Advanced techniques for customizing GsmUi with Tailwind CSS.', 'category_id' => 1, 'status' => 'published', 'published_at' => now()->subDays(50), 'views_count' => 4567, 'author_id' => $authorId, 'tags' => ['tailwind', 'customization', 'advanced']],
+
+            ['title' => 'Building a Multi-Tenant Dashboard with GsmUi', 'slug' => 'building-multi-tenant-dashboard-gsmui', 'body' => "Multi-tenancy is a common requirement. Here's how to build it with GsmUi.\n\n## Architecture\n\n- Tenant-scoped models\n- Role-based dashboards\n- Per-tenant theming\n\n## Implementation\n\nStep-by-step code walkthrough.", 'excerpt' => 'A comprehensive guide to building multi-tenant dashboards with GsmUi and Laravel.', 'category_id' => 1, 'status' => 'published', 'published_at' => now()->subDays(55), 'views_count' => 6789, 'author_id' => $authorId, 'tags' => ['multi-tenant', 'dashboard', 'architecture']],
+
+            ['title' => 'Community Update: December 2024', 'slug' => 'community-update-december-2024', 'body' => "A roundup of community activity, new contributors, and upcoming events.\n\n## New Contributors\n\nWelcome to our 15 new contributors this month!\n\n## Popular Discussions\n\n- Theme marketplace feedback\n- Component request voting\n- Livewire 3 migration stories\n\n## Upcoming\n\n- GsmUi Conf 2025\n- New component roadmap", 'excerpt' => 'Monthly community update featuring new contributors, discussions, and upcoming events.', 'category_id' => 4, 'status' => 'published', 'published_at' => now()->subDays(2), 'views_count' => 2345, 'author_id' => $authorId, 'tags' => ['community', 'update', 'monthly']],
+        ];
+
+        foreach ($posts as $postData) {
+            Post::create($postData);
+        }
+    }
+}

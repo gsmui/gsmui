@@ -1,7 +1,7 @@
 {
     "name": "gsmui/gsmui-pro",
-    "description": "The pro version of Gsmui, the official UI component library for Livewire.",
-    "keywords": ["gsmui", "laravel", "livewire", "components", "ui"],
+    "description": "The pro version of Gsmui, the official UI component library for Livewire. 200+ premium components with dark mode, CSP support, and comprehensive theming.",
+    "keywords": ["gsmui", "laravel", "livewire", "components", "ui", "dark-mode", "csp", "tailwind"],
     "license": "proprietary",
     "authors": [
         {
@@ -10,15 +10,27 @@
         }
     ],
     "require": {
-        "php": "^8.1|^8.2|^8.3|^8.4|^8.5|^8.6|^8.7|^8.8|^8.9|^9.0",
-        "illuminate/console": "^10.0|^11.0|^12.0|^13.0",
-        "illuminate/support": "^10.0|^11.0|^12.0|^13.0",
-        "illuminate/view": "^10.0|^11.0|^12.0|^13.0",
-        "symfony/console": "^6.0|^7.0|^8.0",
-        "livewire/livewire": "^3.7.4|^4.0",
-        "filament/support": "^3.0|^4.0",
-        "laravel/prompts": "^0.1.24|^0.2|^0.3",
-        "gsmui/gsmui": "1.0|dev-main"
+        "php": "^8.1",
+        "illuminate/console": "^10.0|^11.0|^12.0",
+        "illuminate/support": "^10.0|^11.0|^12.0",
+        "illuminate/view": "^10.0|^11.0|^12.0",
+        "livewire/livewire": "^3.0"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^9.0",
+        "phpunit/phpunit": "^11.0",
+        "laravel/pint": "^1.0"
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        },
+        "policy": {
+            "advisories": {
+                "block": false
+            }
+        }
     },
     "autoload": {
         "psr-4": {
@@ -28,30 +40,34 @@
             "src/helpers.php"
         ]
     },
+    "autoload-dev": {
+        "psr-4": {
+            "GsmuiPro\\Tests\\": "tests/",
+            "App\\": "workbench/app/"
+        }
+    },
     "extra": {
         "laravel": {
             "providers": [
                 "GsmuiPro\\GsmuiProServiceProvider"
             ],
             "aliases": {
-                "Gsmui": "GsmuiPro\\GsmuiPro"
+                "GsmuiPro": "GsmuiPro\\GsmuiPro"
             }
         }
     },
-    "autoload-dev": {
-        "psr-4": {
-            "App\\": "workbench/app/"
-        }
-    },
     "scripts": {
+        "test": "vendor/bin/phpunit",
+        "test-coverage": "vendor/bin/phpunit --coverage-html coverage",
+        "lint": "vendor/bin/php-cs-fixer fix --dry-run --diff",
+        "format": "vendor/bin/php-cs-fixer fix",
+        "analyse": "vendor/bin/phpstan analyse",
         "serve": [
             "Composer\\Config::disableProcessTimeout",
-            "@php vendor/bin/testbench workbench:build --ansi",
-            "@php vendor/bin/testbench serve --port 3000 --ansi"
+            "@php vendor/bin/testbench serve --port=3000"
         ]
     },
-    "require-dev": {
-        "livewire/volt": "*",
-        "orchestra/testbench": "^10.8|^11.0"
-    }
+
+    "minimum-stability": "stable",
+    "prefer-stable": true
 }

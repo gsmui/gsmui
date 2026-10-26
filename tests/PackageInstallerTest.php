@@ -1,217 +1,103 @@
 <?php
 
-namespace Tests;
+namespace GsmuiPro\Tests;
 
 use Orchestra\Testbench\TestCase;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Artisan;
 use GsmuiPro\GsmuiProServiceProvider;
+use GsmuiPro\GsmuiProManager;
 
 class PackageInstallerTest extends TestCase
 {
-    protected function getPackageProviders($app)
+    protected function getPackageProviders($app): array
     {
         return [
             GsmuiProServiceProvider::class,
         ];
     }
 
-    protected function defineEnvironment($app)
+    public function test_package_can_be_installed(): void
     {
-        $app['config']->set('gsmui-pro-csp.enabled', false);
+        $manager = $this->app->make(GsmuiProManager::class);
+        $this->assertInstanceOf(GsmuiProManager::class, $manager);
     }
 
-    /** @test */
-    public function it_registers_the_service_provider()
+    public function test_config_files_exist(): void
     {
-        $providers = $this->app->getLoadedProviders();
-
-        $this->assertArrayHasKey(GsmuiProServiceProvider::class, $providers);
+        $this->assertFileExists(__DIR__.'/../stubs/config/gsmui-pro.php');
+        $this->assertFileExists(__DIR__.'/../stubs/config/gsmui-pro-csp.php');
     }
 
-    /** @test */
-    public function it_registers_the_gsmui_pro_manager_singleton()
+    public function test_helpers_are_loaded(): void
     {
-        $this->assertTrue($this->app->bound('GsmuiPro\GsmuiProManager'));
+        $this->assertTrue(function_exists('gsmui'));
+        $this->assertTrue(function_exists('gsmui_classes'));
+        $this->assertTrue(function_exists('gsmui_id'));
+        $this->assertTrue(function_exists('gsmui_version'));
+        $this->assertTrue(function_exists('gsmui_theme'));
+        $this->assertTrue(function_exists('gsmui_set_theme'));
+        $this->assertTrue(function_exists('gsmui_css_variables'));
+        $this->assertTrue(function_exists('gsmui_kebab'));
+        $this->assertTrue(function_exists('gsmui_camel'));
+        $this->assertTrue(function_exists('gsmui_pascal'));
+        $this->assertTrue(function_exists('gsmui_snake'));
     }
 
-    /** @test */
-    public function it_merges_csp_config()
+    public function test_facade_can_be_used(): void
     {
-        $config = config('gsmui-pro-csp');
-
-        $this->assertIsArray($config);
-        $this->assertArrayHasKey('enabled', $config);
-        $this->assertArrayHasKey('use_nonce', $config);
-        $this->assertArrayHasKey('report_only', $config);
+        $version = \GsmuiPro\GsmuiPro::getVersion();
+        $this->assertIsString($version);
     }
 
-    /** @test */
-    public function it_registers_blade_component_path()
+    public function test_manager_singleton_is_same_instance(): void
     {
-        $service = $this->app->make(GsmuiProServiceProvider::class);
+        $manager1 = gsmui();
+        $manager2 = gsmui();
 
-        $this->assertNotNull($service);
+        $this->assertSame($manager1, $manager2);
     }
 
-    /** @test */
-    public function it_has_required_source_files()
+    public function test_default_theme_is_set(): void
     {
-        $base = dirname(__DIR__);
-
-        $this->assertFileExists($base . '/src/GsmuiProServiceProvider.php');
-        $this->assertFileExists($base . '/src/GsmuiProManager.php');
-        $this->assertFileExists($base . '/src/helpers.php');
-        $this->assertFileExists($base . '/composer.json');
+        $theme = gsmui_theme();
+        $this->assertEquals('default', $theme);
     }
 
-    /** @test */
-    public function it_has_required_config_files()
+    public function test_theme_can_be_changed(): void
     {
-        $base = dirname(__DIR__);
-
-        $this->assertFileExists($base . '/stubs/config/gsmui-pro-csp.php');
+        gsmui_set_theme('blue');
+        $this->assertEquals('blue', gsmui_theme());
     }
 
-    /** @test */
-    public function it_has_required_view_files()
+    public function test_unique_id_is_unique(): void
     {
-        $base = dirname(__DIR__);
-        $views = $base . '/stubs/resources/views/gsmui';
-
-        $this->assertDirectoryExists($views);
-        $this->assertDirectoryExists($views . '/button');
-        $this->assertDirectoryExists($views . '/input');
-        $this->assertDirectoryExists($views . '/modal');
-        $this->assertDirectoryExists($views . '/card');
-    }
-
-    /** @test */
-    public function it_has_required_dist_files()
-    {
-        $base = dirname(__DIR__);
-
-        $this->assertFileExists($base . '/dist/gsmui.js');
-        $this->assertFileExists($base . '/dist/manifest.json');
-    }
-
-    /** @test */
-    public function it_can_publish_csp_config()
-    {
-        $configPath = config_path('gsmui-pro-csp.php');
-
-        // Clean up if exists
-        if (File::exists($configPath)) {
-            File::delete($configPath);
+        $ids = [];
+        for ($i = 0; $i < 100; $i++) {
+            $ids[] = gsmui_id();
         }
-
-        Artisan::call('vendor:publish', [
-            '--tag' => 'gsmui-pro-csp-config',
-        ]);
-
-        $this->assertFileExists($configPath);
-
-        // Clean up
-        File::delete($configPath);
+        $this->assertCount(100, array_unique($ids));
     }
 
-    /** @test */
-    public function it_composer_json_has_correct_metadata()
+    public function test_string_helpers_work(): void
     {
-        $composer = json_decode(
-            file_get_contents(dirname(__DIR__) . '/composer.json'),
-            true
-        );
-
-        $this->assertEquals('gsmui/gsmui-pro', $composer['name']);
-        $this->assertArrayHasKey('require', $composer);
-        $this->assertArrayHasKey('extra', $composer);
-        $this->assertArrayHasKey('laravel', $composer['extra']);
-        $this->assertArrayHasKey('providers', $composer['extra']['laravel']);
+        $this->assertEquals('hello-world', gsmui_kebab('helloWorld'));
+        $this->assertEquals('helloWorld', gsmui_camel('hello-world'));
+        $this->assertEquals('HelloWorld', gsmui_pascal('hello-world'));
+        $this->assertEquals('hello_world', gsmui_snake('hello-world'));
     }
 
-    /** @test */
-    public function it_composer_json_requires_laravel_packages()
+    public function test_version_helper_returns_string(): void
     {
-        $composer = json_decode(
-            file_get_contents(dirname(__DIR__) . '/composer.json'),
-            true
-        );
-
-        $this->assertArrayHasKey('illuminate/console', $composer['require']);
-        $this->assertArrayHasKey('illuminate/support', $composer['require']);
-        $this->assertArrayHasKey('illuminate/view', $composer['require']);
+        $version = gsmui_version();
+        $this->assertIsString($version);
+        $this->assertNotEmpty($version);
     }
 
-    /** @test */
-    public function it_composer_json_requires_livewire()
+    public function test_css_variables_generation(): void
     {
-        $composer = json_decode(
-            file_get_contents(dirname(__DIR__) . '/composer.json'),
-            true
-        );
+        gsmui()->setCssVariable('primary', '#3b82f6');
+        $css = gsmui_css_variables();
 
-        $this->assertArrayHasKey('livewire/livewire', $composer['require']);
-    }
-
-    /** @test */
-    public function it_has_autoload_configuration()
-    {
-        $composer = json_decode(
-            file_get_contents(dirname(__DIR__) . '/composer.json'),
-            true
-        );
-
-        $this->assertArrayHasKey('autoload', $composer);
-        $this->assertArrayHasKey('psr-4', $composer['autoload']);
-        $this->assertArrayHasKey('GsmuiPro\\\\', $composer['autoload']['psr-4']);
-    }
-
-    /** @test */
-    public function it_has_helpers_file_autoloaded()
-    {
-        $composer = json_decode(
-            file_get_contents(dirname(__DIR__) . '/composer.json'),
-            true
-        );
-
-        $this->assertContains('src/helpers.php', $composer['autoload']['files']);
-    }
-
-    /** @test */
-    public function it_has_serve_script()
-    {
-        $composer = json_decode(
-            file_get_contents(dirname(__DIR__) . '/composer.json'),
-            true
-        );
-
-        $this->assertArrayHasKey('scripts', $composer);
-        $this->assertArrayHasKey('serve', $composer['scripts']);
-    }
-
-    /** @test */
-    public function it_has_readme_file()
-    {
-        $this->assertFileExists(dirname(__DIR__) . '/README.md');
-    }
-
-    /** @test */
-    public function it_has_changelog_file()
-    {
-        $this->assertFileExists(dirname(__DIR__) . '/CHANGELOG.md');
-    }
-
-    /** @test */
-    public function it_has_license_file()
-    {
-        $this->assertFileExists(dirname(__DIR__) . '/LICENSE.md');
-    }
-
-    /** @test */
-    public function it_has_tests_directory()
-    {
-        $this->assertDirectoryExists(dirname(__DIR__) . '/tests');
-        $this->assertDirectoryExists(dirname(__DIR__) . '/tests/Browser');
+        $this->assertStringContainsString(':root', $css);
+        $this->assertStringContainsString('--gsmui-primary', $css);
     }
 }

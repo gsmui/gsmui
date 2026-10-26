@@ -1,0 +1,131 @@
+﻿
+---
+
+# 40. Scheduler Monitoring
+
+### 40.1 Metrics to Track
+
+| Metric | Source | Alert Threshold |
+| --- | --- | --- |
+| schedule_run_duration_ms | Timer | > 5000ms |
+| schedule_tasks_registered | Counter | < expected count |
+| schedule_lock_acquired | Counter | Any failure |
+| schedule_task_failed | Counter | > 0 |
+| schedule_task_duration_ms | Timer | Per-task threshold |
+| schedule_output_lines | Gauge | > 1000 |
+| schedule_last_run_timestamp | Timestamp | > 2 minutes ago |
+
+### 40.2 Monitoring Integration
+
+Track task start/completion/failure with custom metrics:
+
+- Before hook increments started counter
+- After hook increments completed counter
+- onFailure hook increments failed counter with error class
+- Use metrics() helper to push to monitoring backend
+- Tag each metric with task name for per-task dashboards
+
+### 40.3 Dashboard Queries
+
+Find long-running tasks: query schedule_history for AVG(duration_ms) grouped by command over 7 days. Find frequently failing tasks: query schedule_history for COUNT(*) WHERE status = failed grouped by command with HAVING failure_count > 3.
+
+### 40.4 Alert Rules
+
+| Condition | Severity | Action |
+| --- | --- | --- |
+| schedule:run > 10s | Warning | Slack notify |
+| schedule:run > 30s | Critical | Page on-call |
+| Task fails 3+ times | Critical | PagerDuty |
+| No schedule:run for 5min | Critical | Restart cron |
+| Lock held > 30min | Warning | Clear lock |
+
+---
+
+# 41. Scheduler Backup and Recovery
+
+### 41.1 Backing Up Schedule Configuration
+
+Export the current schedule to a JSON file for documentation and disaster recovery. Iterate over all registered events, capture command, expression, timezone, overlap settings, server settings, and queue. Write to storage/app/schedule-config.json with pretty print.
+
+### 41.2 Recovery Procedures
+
+| Scenario | Steps |
+| --- | --- |
+| Redis lock stuck | Run redis-cli DEL schedule:* to clear all locks |
+| Schedule not running | Check crontab -l, check storage/logs/schedule.log, run php artisan schedule:run manually |
+| Task corrupted | Export schedule, compare to expected config, re-register |
+| Cron service down | Restart cron: service cron restart (Linux) or systemctl restart cron |
+| Multiple servers running same task | Verify onOneServer() is set, check Redis connectivity |
+
+### 41.3 Disaster Recovery Runbook
+
+`	ext
+1. Assess: Which tasks are affected?
+2. Contain: Stop cron on all servers
+3. Fix: Clear stuck locks, fix corrupted configs
+4. Verify: Run schedule:run --verbose on one server
+5. Resume: Restart cron on all servers
+6. Monitor: Watch for 30 minutes
+7. Post-mortem: Document root cause and prevention
+`
+
+---
+
+# 42. Scheduler Integration Patterns
+
+### 42.1 Integration with Feature Flags
+
+Conditionally schedule tasks based on feature flags. Check the FeatureFlagService in the schedule callback to determine whether to run. This allows enabling/disabling scheduled tasks without code deployment.
+
+### 42.2 Integration with Observers
+
+Scheduled tasks often trigger observer events. When a scheduled task updates a model, the model observer fires. Ensure observers are idempotent since scheduled tasks may retry.
+
+### 42.3 Integration with Multi-Tenancy
+
+For multi-tenant deployments, schedule tasks per-tenant or globally:
+
+- Global tasks: backup, analytics aggregation, cache warming
+- Per-tenant tasks: tenant-specific cleanup, per-tenant analytics
+- Use tenant context switching in task execution
+
+### 42.4 Integration with Settings
+
+Read task configuration from the settings system rather than hardcoding. The scheduler reads settings once at registration time. For dynamic settings, use runtime callbacks.
+
+---
+
+# 43. Scheduler Security
+
+### 43.1 Command Authorization
+
+Scheduled commands should validate they are running in the correct context:
+
+- Check APP_ENV matches expected environment
+- Verify the command is registered and authorized
+- Log the command execution with user context where applicable
+- Rate-limit commands that modify data
+
+### 43.2 Output Security
+
+Scheduled command output should never contain:
+
+- Database credentials or connection strings
+- API keys or tokens
+- User PII (emails, names, addresses)
+- Internal IP addresses or hostnames
+- Stack traces in production logs
+
+### 43.3 Lock Security
+
+Redis locks used for schedule coordination should:
+
+- Use unique lock namespacing per application instance
+- Set reasonable TTLs to prevent permanent locks
+- Be cleared only by authorized processes
+- Be monitored for unexpected acquisition patterns
+
+---
+
+# Next Document
+**07.51 - CLI Commands** defines the Artisan command structure, signature conventions, table output, idempotency, and how commands wire into the domains above.

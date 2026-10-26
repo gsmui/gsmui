@@ -2,6 +2,12 @@
 
 @props([])
 
-<nav {{ $attributes->class('flex flex-col gap-0.5') }} data-gsmui-navlist>
+@php
+$classes = Gsmui::classes()
+    ->add('flex flex-col gap-0.5')
+    ;
+@endphp
+
+<nav {{ $attributes->class($classes) }} data-gsmui-navlist>
     {{ $slot }}
 </nav>
