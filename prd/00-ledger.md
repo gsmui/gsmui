@@ -69,11 +69,11 @@ regardless of any single component. Each has a `file:line` evidence pointer.
 | D-001 | `Gsmui` facade was never aliased, so every view threw `Class "Gsmui" not found` | fixed in `src/GsmuiProServiceProvider.php` | ✅ shipped |
 | D-002 | API mismatch: 316 views call fluent `Gsmui::classes()->add()`, manager exposed `classes(string): array` | fixed via `src/ClassBuilder.php` | ✅ shipped |
 | D-003 | Base dependency `gsmui/gsmui` missing from `composer.json` require | `composer.json` | 🟡 partial |
-| D-004 | Malformed SVG cascades to every icon consumer | `stubs/resources/views/gsmui/icon/index.blade.php:113` | 🟡 partial |
-| D-005 | Invalid markup | `gsmui/avatar/index.blade.php:35` | 🟡 partial |
-| D-006 | Invalid range-slider markup | `gsmui/range-slider/index.blade.php:29-30` | 🟡 partial |
-| D-007 | Invalid image-gallery markup | `gsmui/image-gallery/index.blade.php:128` | 🟡 partial |
-| D-008 | Themes reference broken | `gsmui/themes/index.blade.php:9` | 🟡 partial |
+| D-004 | Malformed SVG in the icon map broke every icon consumer | fixed — `stubs/resources/views/gsmui/icon/index.blade.php:110` (unterminated entry) | ✅ shipped |
+| D-005 | `match` arm written inside an array literal, plus an inline style | fixed — `gsmui/avatar/index.blade.php` | ✅ shipped |
+| D-006 | Invalid range-slider markup | `gsmui/range-slider/index.blade.php` | 🟡 partial |
+| D-007 | Invalid image-gallery markup | `gsmui/image-gallery/index.blade.php` | 🟡 partial |
+| D-008 | `include __DIR__` resolved to the compiled-view cache, not the package | fixed — resolves via the `gsmui` view hint | ✅ shipped |
 | D-009 | Bogus `route()` calls would throw at runtime | `dock`, `radial-progress`, `steps` | 🟡 partial |
 | D-010 | No `phpunit.xml` committed; the suite could not run at all | fixed — `phpunit.xml` added | ✅ shipped |
 | D-011 | No render-smoke coverage; regressions were invisible | fixed — `tests/RenderSmokeTest.php` | ✅ shipped |
