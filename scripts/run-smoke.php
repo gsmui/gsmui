@@ -3,53 +3,72 @@
 /**
  * Drives the render-smoke sweep in resumable batches.
  *
- * A handful of components (e.g. `form-builder`) are heavy enough to exhaust PHP
- * memory, which kills the whole PHPUnit run. That would silently hide the other
- * 150 results. So each component's verdict is persisted as soon as it is known,
- * and this script re-launches PHPUnit until nothing new is learned.
+ * A few components are heavy enough to exhaust PHP memory, which kills the whole
+ * PHPUnit run and would silently hide every result after them. Each component's
+ * verdict is persisted as soon as it is known, so this script re-launches
+ * PHPUnit until a round stops making progress.
  */
 
 const MAX_ROUNDS = 40;
 
 $root = dirname(__DIR__);
 $resultsPath = $root . '/tests/render-smoke-results.json';
-$logPath = $root . '/smoke-out.txt';
 
 $manifest = json_decode((string) file_get_contents($root . '/component-manifest.json'), true);
 $total = count(array_filter($manifest['components'], fn ($c) => $c['has_index']));
 
-$seen = 0;
+$logged = 0;
 
 for ($round = 1; $round <= MAX_ROUNDS; $round++) {
     $before = is_file($resultsPath)
         ? count(json_decode((string) file_get_contents($resultsPath), true)['results'] ?? [])
         : 0;
 
+    if ($before >= $total) {
+        break;
+    }
+
     $command = sprintf(
-        'php -d memory_limit=-1 %s --filter RenderSmokeTest --no-coverage > %s 2>&1',
-        escapeshellarg($root . '/vendor/phpunit/phpunit/phpunit'),
-        escapeshellarg($logPath)
+        'php -d memory_limit=-1 %s --filter RenderSmokeTest --no-coverage',
+        escapeshellarg($root . '/vendor/phpunit/phpunit/phpunit')
     );
 
-    // Resume mode: skip components already recorded.
     putenv('SMOKE_RESUME=1');
-    exec($command);
+    $output = [];
+    exec($command . ' 2>&1', $output);
+
+    // Surface the per-component errors PHPUnit printed for this round.
+    foreach (array_slice($output, $logged) as $line) {
+        if (preg_match('/^\[[a-z0-9-]+\]/', $line)) {
+            echo $line, "\n";
+        }
+    }
+    $logged = count($output);
 
     $after = is_file($resultsPath)
         ? count(json_decode((string) file_get_contents($resultsPath), true)['results'] ?? [])
         : 0;
 
-    printf("round %d: %d -> %d of %d components\n", $round, $before, $after, $total);
+    printf("round %d: %d -> %d of %d\n", $round, $before, $after, $total);
 
-    if ($after >= $total || $after === $before) {
-        $seen = $after;
+    if ($after === $before) {
         break;
     }
-    $seen = $after;
 }
 
-if ($seen >= $total) {
-    echo "sweep complete\n";
-} else {
-    printf("sweep stalled at %d of %d (remaining components crash PHP)\n", $seen, $total);
+$results = is_file($resultsPath)
+    ? json_decode((string) file_get_contents($resultsPath), true)['results'] ?? []
+    : [];
+
+$counts = array_count_values($results);
+ksort($counts);
+
+echo "\n";
+foreach ($counts as $status => $count) {
+    printf("  %-8s %d\n", $status, $count);
 }
+
+$covered = count($results);
+printf("\n%d of %d components measured\n", $covered, $total);
+
+exit(($counts['fail'] ?? 0) > 0 ? 1 : 0);

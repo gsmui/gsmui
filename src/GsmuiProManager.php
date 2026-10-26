@@ -374,9 +374,16 @@ class GsmuiProManager
     /**
      * Convert a string to snake_case.
      */
+    /**
+     * Convert a string to snake_case, accepting kebab-case input too.
+     *
+     * `Str::snake()` only splits on case and spaces, so `hello-world` would come
+     * back unchanged. Component names are commonly written in kebab-case, so
+     * hyphens are normalised first.
+     */
     public static function snake(string $string): string
     {
-        return Str::snake($string);
+        return Str::snake(str_replace('-', '_', $string));
     }
 
     /**

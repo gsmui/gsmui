@@ -96,8 +96,20 @@ class ComponentRegistrationTest extends TestCase
 
     public function test_classes_merge_works(): void
     {
-        $classes = GsmuiProManager::classes('button');
-        $this->assertIsArray($classes);
+        // Views call the fluent form: Gsmui::classes()->add(...)->add(...).
+        $classes = GsmuiProManager::classes()->add('a')->add('b');
+
+        $this->assertInstanceOf(\GsmuiPro\ClassBuilder::class, $classes);
+        $this->assertSame('a b', (string) $classes);
+        $this->assertSame(['a', 'b'], $classes->toArray());
+    }
+
+    public function test_classes_include_component_defaults(): void
+    {
+        $classes = (string) GsmuiProManager::classes('button')->add('extra');
+
+        $this->assertStringContainsString('inline-flex', $classes);
+        $this->assertStringEndsWith('extra', $classes);
     }
 
     public function test_unique_id_generation(): void

@@ -72,18 +72,18 @@ function classifyFailure(string $error): array
     };
 }
 
-/** Pull `[component] Error: message` lines out of the smoke log. */
-function loadFailureReasons(string $logPath): array
+/** Read recorded error messages from the smoke results file. */
+function loadFailureReasons(string $resultsPath): array
 {
-    if (! is_file($logPath)) {
+    if (! is_file($resultsPath)) {
         return [];
     }
 
+    $data = json_decode((string) file_get_contents($resultsPath), true);
     $reasons = [];
-    foreach (file($logPath, FILE_IGNORE_NEW_LINES) as $line) {
-        if (preg_match('/^\[([a-z0-9-]+)\]\s+(.+?)(?:\s+\(View:.*)?$/', trim($line), $m)) {
-            $reasons[$m[1]] = preg_replace('/\s+\(View:.*$/s', '', $m[2]);
-        }
+
+    foreach ($data['errors'] ?? [] as $name => $message) {
+        $reasons[$name] = $message;
     }
 
     return $reasons;
@@ -116,7 +116,7 @@ function deriveStatus(array $c, array $smoke): array
 $buckets = array_fill_keys(array_keys(MARK), []);
 $rows = [];
 $activeFlags = [];
-$failureReasons = loadFailureReasons($root . '/smoke-out.txt');
+$failureReasons = loadFailureReasons($root . '/tests/render-smoke-results.json');
 $rootCauses = [];
 
 foreach ($manifest['components'] as $c) {
@@ -208,8 +208,8 @@ if ($rootCauses !== []) {
             . count($info['components']) . ' |';
     }
     $lines[] = '';
-    $lines[] = 'Fixing each cause is a single change repeated across components — e.g. F1/F2';
-    $lines[] = 'need one helper, not 12 edits. Fix order: F1, F2, F3, F5 (blocking), then F4, F6.';
+    $lines[] = 'Each cause is one change repeated across components, not N independent bugs.';
+    $lines[] = 'Fix the cause, re-run the sweep, and watch the count drop.';
     $lines[] = '';
 }
 
@@ -229,8 +229,14 @@ $lines[] = '| D-006 | Invalid range-slider markup | `gsmui/range-slider/index.bl
 $lines[] = '| D-007 | Invalid image-gallery markup | `gsmui/image-gallery/index.blade.php:128` | 🟡 partial |';
 $lines[] = '| D-008 | Themes reference broken | `gsmui/themes/index.blade.php:9` | 🟡 partial |';
 $lines[] = '| D-009 | Bogus `route()` calls would throw at runtime | `dock`, `radial-progress`, `steps` | 🟡 partial |';
-$lines[] = '| D-010 | No `phpunit.xml` committed; suite could not run at all | fixed — `phpunit.xml` added | ✅ shipped |';
-$lines[] = '| D-011 | No render-smoke coverage; regressions were invisible | fixed — `tests/RenderSmokeTest.php` (151 components) | ✅ shipped |';
+$lines[] = '| D-010 | No `phpunit.xml` committed; the suite could not run at all | fixed — `phpunit.xml` added | ✅ shipped |';
+$lines[] = '| D-011 | No render-smoke coverage; regressions were invisible | fixed — `tests/RenderSmokeTest.php` | ✅ shipped |';
+$lines[] = '| D-012 | 599 tags use `<x-gsmui:name>`; Laravel only resolves the `::` form | fixed — normalised in `GsmuiProServiceProvider::registerSingleColonAliases()` | ✅ shipped |';
+$lines[] = '| D-013 | `wire()`/`pluck()` treated as attribute-bag methods; `wire()` only exists during a Livewire request | fixed — macros registered in the provider | ✅ shipped |';
+$lines[] = '| D-014 | `spinner` referenced by `combobox` and `datagrid` but never existed | fixed — component added | ✅ shipped |';
+$lines[] = '| D-015 | `select` had 7 partials and no `index.blade.php` | fixed — `select/index.blade.php` added | ✅ shipped |';
+$lines[] = '| D-016 | `@blaze(...)` used in 701 templates but the package is not a dependency | `composer.json` | 🟡 partial |';
+$lines[] = '| D-017 | 13 gallery components embed every sibling variant in `index` and cannot be render-tested | e.g. `frame` (101 files) | 🟡 partial |';
 $lines[] = '';
 $lines[] = '## Component flags by type';
 $lines[] = '';

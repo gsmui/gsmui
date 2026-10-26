@@ -4,10 +4,10 @@
     "prefix": "gsmui:",
     "totals": {
         "components": 153,
-        "with_index": 152,
-        "blade_files": 1747,
-        "gsmui_classes": 317,
-        "blaze": 700,
+        "with_index": 153,
+        "blade_files": 1748,
+        "gsmui_classes": 318,
+        "blaze": 701,
         "inline_style": 746,
         "wire_call": 0,
         "pluck": 15,
@@ -6362,8 +6362,8 @@
         {
             "name": "select",
             "tag": "gsmui:select",
-            "files": 16,
-            "has_index": false,
+            "files": 17,
+            "has_index": true,
             "sub_components": [
                 "button",
                 "check",
@@ -6380,14 +6380,46 @@
                 "selected"
             ],
             "props": {
+                "class": {
+                    "default": "",
+                    "has_default": true
+                },
+                "disabled": {
+                    "default": false,
+                    "has_default": true
+                },
+                "invalid": {
+                    "default": false,
+                    "has_default": true
+                },
+                "label": {
+                    "default": null,
+                    "has_default": false
+                },
+                "name": {
+                    "default": null,
+                    "has_default": false
+                },
+                "options": {
+                    "default": "",
+                    "has_default": true
+                },
+                "placeholder": {
+                    "default": null,
+                    "has_default": false
+                },
+                "size": {
+                    "default": null,
+                    "has_default": false
+                },
                 "variant": {
                     "default": "check",
                     "has_default": true
                 }
             },
             "uses": {
-                "gsmui_classes": 12,
-                "blaze": 16,
+                "gsmui_classes": 13,
+                "blaze": 17,
                 "inline_style": 0,
                 "wire_call": 0,
                 "pluck": 0,
@@ -6396,9 +6428,7 @@
             "requires_js": true,
             "status": "unknown",
             "evidence": "C:/Users/SHAMIM.IT/Desktop/gsmui/stubs/resources/views/gsmui/select/button.blade.php",
-            "flags": [
-                "missing_index"
-            ]
+            "flags": []
         },
         {
             "name": "seo-manager",

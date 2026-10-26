@@ -81,11 +81,14 @@ class RenderSmokeTest extends TestCase
     {
         $resultsPath = dirname(__DIR__) . '/tests/render-smoke-results.json';
         $results = [];
+        $errors = [];
 
         // Resume support: only test components not already recorded, so the sweep
         // can run in batches without redoing expensive renders.
         if (is_file($resultsPath) && getenv('SMOKE_RESUME') === '1') {
-            $results = json_decode((string) file_get_contents($resultsPath), true)['results'] ?? [];
+            $previous = json_decode((string) file_get_contents($resultsPath), true);
+            $results = $previous['results'] ?? [];
+            $errors = $previous['errors'] ?? [];
         }
 
         foreach (self::componentProvider() as $case) {
@@ -114,6 +117,7 @@ class RenderSmokeTest extends TestCase
                 $results[$name] = trim($html) !== '' ? 'pass' : 'fail';
             } catch (\Throwable $e) {
                 $results[$name] = 'fail';
+                $errors[$name] = $e->getMessage();
                 fwrite(STDERR, sprintf("\n[%s] %s: %s", $name, get_class($e), $e->getMessage()));
             }
 
@@ -121,7 +125,11 @@ class RenderSmokeTest extends TestCase
             @mkdir(dirname($resultsPath), 0777, true);
             file_put_contents(
                 $resultsPath,
-                json_encode(['generated_at' => gmdate('c'), 'results' => $results], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) . "\n",
+                json_encode([
+                    'generated_at' => gmdate('c'),
+                    'results' => $results,
+                    'errors' => $errors,
+                ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) . "\n",
             );
 
             // Drop compiled Blade state so 152 renders don't accumulate in memory.

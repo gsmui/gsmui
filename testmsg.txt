@@ -1,0 +1,11 @@
+﻿fix: repair the existing test suite (3 failures -> 0)
+
+- test_classes_merge_works asserted the old classes(string): array signature, which
+  no view actually used. It now covers the fluent builder the templates call.
+- snake() returned kebab-case for hyphenated input; normalise hyphens first.
+- The CSP test asserted unsafe-inline was absent from the whole header, but
+  style-src legitimately keeps it. Assert per-directive instead: script-src must
+  carry the nonce and must not keep unsafe-inline, per the CSP spec.
+
+41 tests, 90 assertions, 0 failures. Deprecation notices come from Laravel 12
+using spl_object_hash() on PHP 8.6 and are not addressed here.

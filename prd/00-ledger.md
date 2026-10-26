@@ -29,14 +29,14 @@ contained no files and therefore answered nothing.
 | 🗑️ deprecated | Slated for removal | has migration note (manual) |
 | ❓ unknown | Never audited | **default** — no evidence either way |
 
-Render-smoke source: `tests/render-smoke-results.json` (152 components tested).
+Render-smoke source: `tests/render-smoke-results.json` (153 components tested).
 
 ## Summary
 
 | Status | Count |
 |---|---:|
-| ✅ shipped | 87 |
-| 🟡 partial | 53 |
+| ✅ shipped | 88 |
+| 🟡 partial | 52 |
 | 🚧 in-progress | 0 |
 | 📋 planned | 0 |
 | 💡 proposed | 0 |
@@ -56,8 +56,8 @@ failing components. Ordered by blast radius.
 | **F4** | Uses a variable/prop it never declared | `input`, `menu`, `modal`, `sidebar`, `table`, `tooltip`, `with-field` | 7 |
 | **F5** | PHP/Blade syntax error | `combobox`, `datagrid`, `form-builder`, `scheduler` | 4 |
 
-Fixing each cause is a single change repeated across components — e.g. F1/F2
-need one helper, not 12 edits. Fix order: F1, F2, F3, F5 (blocking), then F4, F6.
+Each cause is one change repeated across components, not N independent bugs.
+Fix the cause, re-run the sweep, and watch the count drop.
 
 ## Structural defects (non-component)
 
@@ -75,8 +75,14 @@ regardless of any single component. Each has a `file:line` evidence pointer.
 | D-007 | Invalid image-gallery markup | `gsmui/image-gallery/index.blade.php:128` | 🟡 partial |
 | D-008 | Themes reference broken | `gsmui/themes/index.blade.php:9` | 🟡 partial |
 | D-009 | Bogus `route()` calls would throw at runtime | `dock`, `radial-progress`, `steps` | 🟡 partial |
-| D-010 | No `phpunit.xml` committed; suite could not run at all | fixed — `phpunit.xml` added | ✅ shipped |
-| D-011 | No render-smoke coverage; regressions were invisible | fixed — `tests/RenderSmokeTest.php` (151 components) | ✅ shipped |
+| D-010 | No `phpunit.xml` committed; the suite could not run at all | fixed — `phpunit.xml` added | ✅ shipped |
+| D-011 | No render-smoke coverage; regressions were invisible | fixed — `tests/RenderSmokeTest.php` | ✅ shipped |
+| D-012 | 599 tags use `<x-gsmui:name>`; Laravel only resolves the `::` form | fixed — normalised in `GsmuiProServiceProvider::registerSingleColonAliases()` | ✅ shipped |
+| D-013 | `wire()`/`pluck()` treated as attribute-bag methods; `wire()` only exists during a Livewire request | fixed — macros registered in the provider | ✅ shipped |
+| D-014 | `spinner` referenced by `combobox` and `datagrid` but never existed | fixed — component added | ✅ shipped |
+| D-015 | `select` had 7 partials and no `index.blade.php` | fixed — `select/index.blade.php` added | ✅ shipped |
+| D-016 | `@blaze(...)` used in 701 templates but the package is not a dependency | `composer.json` | 🟡 partial |
+| D-017 | 13 gallery components embed every sibling variant in `index` and cannot be render-tested | e.g. `frame` (101 files) | 🟡 partial |
 
 ## Component flags by type
 
@@ -97,12 +103,6 @@ Inline `style=` attributes — CSP/`unsafe-inline` risk and unthemed.
 Calls `route()` on a hardcoded name — throws unless the host app defines that route.
 
 `dock`, `radial-progress`, `steps`
-
-### `missing_index` — 1 component(s)
-
-No `index.blade.php` — the component cannot be used via `gsmui:<name>`.
-
-`select`
 
 ## Full component table
 
@@ -221,7 +221,7 @@ No `index.blade.php` — the component cannot be used via `gsmui:<name>`.
 | [`scheduler`](../docs/03-components/scheduler.md) | `gsmui:scheduler` | 🟡 partial | F5 — PHP/Blade syntax error | 1 | 11 | yes |
 | [`scroll-area`](../docs/03-components/scroll-area.md) | `gsmui:scroll-area` | 🟡 partial | renders, but has flags: inline_style | 1 | 4 | — |
 | [`search`](../docs/03-components/search.md) | `gsmui:search` | ✅ shipped | render-smoke pass, no flags | 1 | 6 | yes |
-| [`select`](../docs/03-components/select.md) | `gsmui:select` | 🟡 partial | no index.blade.php | 16 | 1 | yes |
+| [`select`](../docs/03-components/select.md) | `gsmui:select` | ✅ shipped | render-smoke pass, no flags | 17 | 9 | yes |
 | [`seo-manager`](../docs/03-components/seo-manager.md) | `gsmui:seo-manager` | ✅ shipped | render-smoke pass, no flags | 1 | 3 | yes |
 | [`separator`](../docs/03-components/separator.md) | `gsmui:separator` | ✅ shipped | render-smoke pass, no flags | 1 | 4 | yes |
 | [`sidebar`](../docs/03-components/sidebar.md) | `gsmui:sidebar` | 🟡 partial | F4 — Uses a variable/prop it never declared | 3 | 5 | yes |

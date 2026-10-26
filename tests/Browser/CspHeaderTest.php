@@ -95,8 +95,20 @@ class CspHeaderTest extends TestCase
         $csp = $response->headers->get('Content-Security-Policy');
 
         $this->assertStringContainsString("'nonce-", $csp);
-        // When nonce is used, unsafe-inline for script-src should be dropped
-        $this->assertStringNotContainsString("'unsafe-inline'", $csp);
+
+        // When a nonce is used, unsafe-inline is dropped from script-src (browsers
+        // ignore it there anyway). style-src keeps it, since styles are injected
+        // via <style> tags rather than a nonce-bearing element.
+        $this->assertMatchesRegularExpression(
+            "/script-src[^;]*'nonce-[^']+'/",
+            $csp,
+            'script-src should use a nonce'
+        );
+        $this->assertDoesNotMatchRegularExpression(
+            "/script-src[^;]*'unsafe-inline'/",
+            $csp,
+            'script-src should not keep unsafe-inline once a nonce is present'
+        );
     }
 
     /** @test */
