@@ -12,7 +12,7 @@ Ultimately, you can pretty much make any component by copying bits and pieces fr
 - **`stubs/resources/views/gsmui/<component>/index.blade.php`** — where components actually live. This is registered as the `gsmui:` Blade anonymous-component namespace by `GsmuiProServiceProvider::bootComponentPath()`. ~70 components exist (accordion, date-picker, select, slider, editor, etc.).
 - **`dist/`** — built JS/CSS bundles (`gsmui.js`, `editor.js`, `editor.css` + `.min.js`/`.module.js` variants + `manifest.json`). There is **no build config in this repo** (no vite/rollup/webpack/package.json at root) — `dist/` is produced upstream. Never commit `dist/` changes unless explicitly asked.
 - **`stubs/config/gsmui-pro-csp.php`** — publishable CSP config (`php artisan vendor:publish --tag=gsmui-pro-csp-config`).
-- **`prompts/component-builder.md`** — a standalone component-builder prompt; overlaps with this file but adds a Blade skeleton and security tables.
+- **`prd/`** — the documentation tree. Start at `prd/00-ledger.md` (generated, evidence-backed component status) and `prd/00-index.md` (what the rest is). `prd/spec/` holds the canonical spec, `prd/source/` a second overlapping doc set, `prd/archive/` superseded material including `component-builder.md` (a standalone component-builder prompt that overlaps with this file but adds a Blade skeleton and security tables).
 
 ## Commands
 

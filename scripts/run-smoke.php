@@ -71,4 +71,19 @@ foreach ($counts as $status => $count) {
 $covered = count($results);
 printf("\n%d of %d components measured\n", $covered, $total);
 
-exit(($counts['fail'] ?? 0) > 0 ? 1 : 0);
+// Exit non-zero only with --strict. `docs:build` chains through this script, so
+// a non-zero exit would abort before the ledger is regenerated — leaving the
+// ledger stale precisely when components are broken. `test:smoke` passes
+// --strict so CI still fails on a real regression.
+$failed = $counts['fail'] ?? 0;
+$strict = in_array('--strict', $argv ?? [], true) || getenv('SMOKE_STRICT');
+
+if ($failed > 0) {
+    printf(
+        "\n%d component(s) failed to render. See %s\n",
+        $failed,
+        str_replace('\\', '/', str_replace(getcwd() . DIRECTORY_SEPARATOR, '', $resultsPath))
+    );
+}
+
+exit(($failed > 0 && $strict) ? 1 : 0);

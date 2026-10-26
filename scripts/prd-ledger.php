@@ -269,7 +269,7 @@ $lines[] = '| Component | Tag | Status | Reason | Files | Props | JS |';
 $lines[] = '|---|---|---|---|---:|---:|---|';
 foreach ($manifest['components'] as $c) {
     [$status, $reason] = $rows[$c['name']];
-    $lines[] = '| [`' . $c['name'] . '`](../docs/03-components/' . $c['name'] . '.md) | `' . $c['tag'] . '` | '
+    $lines[] = '| `' . $c['name'] . '` | `' . $c['tag'] . '` | '
         . MARK[$status] . ' | ' . cell($reason) . ' | ' . $c['files'] . ' | '
         . count($c['props']) . ' | ' . ($c['requires_js'] ? 'yes' : '—') . ' |';
 }

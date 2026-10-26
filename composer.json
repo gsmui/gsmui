@@ -61,13 +61,13 @@
         "test-coverage": "vendor/bin/phpunit --coverage-html coverage",
         "test:smoke": [
             "Composer\\Config::disableProcessTimeout",
-            "@php scripts/run-smoke.php"
+            "@php scripts/run-smoke.php --strict"
         ],
         "manifest": "@php scripts/build-component-manifest.php",
         "ledger": "@php scripts/prd-ledger.php",
         "docs:build": [
             "@manifest",
-            "@test:smoke",
+            "@php scripts/run-smoke.php",
             "@ledger"
         ],
         "lint": "vendor/bin/php-cs-fixer fix --dry-run --diff",
