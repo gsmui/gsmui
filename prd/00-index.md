@@ -38,7 +38,7 @@ single 60 KB file on a whole subsystem as a sketch and check against `src/` and
 
 ### `source/` — the source documentation set
 
-**234 files, topics 01–24.** A second, independently written specification. It
+**232 files, topics 01–24.** A second, independently written specification. It
 covers the ground `spec/` does not (01 vision, 02 business, 03 design-system,
 04 product-planning) and overlaps it for 05–24.
 
