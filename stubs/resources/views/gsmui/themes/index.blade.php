@@ -6,7 +6,11 @@
 ])
 
 @php
-$themeData = include __DIR__ . '/themes.php';
+// Compiled views are cached in storage/framework/views, so __DIR__ is not this
+// component's directory. Resolve the package's source views through the
+// registered "gsmui" namespace instead of guessing relative paths.
+$viewPaths = app('view')->getFinder()->getHints()['gsmui'] ?? [];
+$themeData = include rtrim($viewPaths[0] ?? '__MISSING__', '/') . '/themes/themes.php';
 $themes = $themeData['themes'];
 $bases = $themeData['palettes']['bases'];
 $accents = $themeData['palettes']['accents'];

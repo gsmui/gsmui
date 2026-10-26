@@ -339,7 +339,7 @@
     x-data="{ 
         search: '', 
         activeCategory: 'smileys',
-        categories: {{ json_encode(collect($categories)->mapWithKeys(fn($cat, $key) => [$key => ['name' => $cat['name'], 'icon' => $cat['icon']]))->toArray()) }},
+        categories: {{ json_encode(collect($categories)->mapWithKeys(fn($cat, $key) => [$key => ['name' => $cat['name'], 'icon' => $cat['icon']]])->toArray()) }},
         emojiNames: {{ json_encode($emojiNames) }},
         searchEmoji(emoji) {
             if (!this.search) return false;

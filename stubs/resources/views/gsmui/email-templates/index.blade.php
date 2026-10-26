@@ -95,7 +95,7 @@ document.addEventListener('alpine:init', () => {
 
         openEditor(tpl) {
             this.editingTemplate = tpl;
-            this.form = tpl ? { ...tpl } : { name: '', subject: '', category: 'Notifications', body: '<!DOCTYPE html>\n<html>\n<body>\n  <h1>{{ title }}</h1>\n  <p>{{ content }}</p>\n</body>\n</html>' };
+            this.form = tpl ? { ...tpl } : { name: '', subject: '', category: 'Notifications', body: '<!DOCTYPE html>\n<html>\n<body>\n  <h1>@{{ title }}</h1>\n  <p>@{{ content }}</p>\n</body>\n</html>' };
             this.editorOpen = true;
         },
 

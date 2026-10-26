@@ -49,7 +49,7 @@ $rowClasses .= $striped ? ' even:bg-zinc-50/50 dark:even:bg-zinc-800/50' : '';
     selected: @js($selected),
     serverSide: @js($serverSide),
     virtualized: @js($virtualized),
-    density: '@js($density)',
+    density: @js($density),
 })" data-gsmui-datagrid>
     
     <!-- Toolbar -->

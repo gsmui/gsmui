@@ -93,7 +93,7 @@ $pages = $pages ?: [
                         <pre class="bg-zinc-900 text-green-400 p-4 rounded-lg overflow-x-auto text-sm"><code>composer require vendor/package</code></pre>
 
                         <h2>Basic Usage</h2>
-                        <pre class="bg-zinc-900 text-green-400 p-4 rounded-lg overflow-x-auto text-sm"><code>&lt;x-gsmui:{{ currentPage.title.toLowerCase().replace(/\s+/g, '-') }} /&gt;</code></pre>
+                        <pre class="bg-zinc-900 text-green-400 p-4 rounded-lg overflow-x-auto text-sm"><code>&lt;x-gsmui:<span x-text="currentPage.title.toLowerCase().replace(/\s+/g, '-')"></span> /&gt;</code></pre>
 
                         <h2>Props</h2>
                         <div class="overflow-x-auto">

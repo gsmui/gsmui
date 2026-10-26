@@ -1,0 +1,18 @@
+﻿fix: make components render; add evidence-based completion ledger
+
+Root-cause fixes, each verified by the render-smoke sweep (104 -> 128 of 151 passing):
+
+- Register the Gsmui facade alias; every view threw "Class Gsmui not found".
+- Replace static classes(string): array with a fluent ClassBuilder, matching the
+  316 existing Gsmui::classes()->add() call sites.
+- Normalise single-colon <x-gsmui:name> tags to <x-gsmui::name> before
+  compilation (599 call sites).
+- Add pluck/wire/hasWire attribute-bag macros. Livewire registers wire() through
+  a component hook, so it did not exist outside a Livewire request.
+- Fix icon (unterminated array entry), avatar (match syntax inside an array +
+  inline style), emoji, docs-engine, email-templates, themes, tree, datagrid.
+- Add the missing spinner component and select index.
+
+Tooling: component-manifest.json and prd-ledger.php derive status only from
+measured evidence; RenderSmokeTest writes tests/render-smoke-results.json.
+A component cannot be marked shipped without a passing render.

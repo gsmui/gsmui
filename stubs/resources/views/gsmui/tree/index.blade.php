@@ -24,9 +24,9 @@ $expandedIds = collect($expanded)->pluck('id')->toArray();
         lazy: @js($lazy)
     })"
 >
-    <template x-for="item in @js($items)" :key="item.id">
-        <x-gsmui:tree.item :item="item" :show-icons="true" :level="0" />
-    </template>
+    @foreach ($items as $item)
+        <x-gsmui:tree.item :item="$item" :show-icons="$showIcons" :level="0" />
+    @endforeach
 </div>
 
 <script>

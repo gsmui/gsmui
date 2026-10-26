@@ -44,13 +44,71 @@ class GsmuiProManager
     protected array $cssVariables = [];
 
     /**
-     * Get the class merge utility for Tailwind CSS.
+     * Start a fluent class list for a Blade component.
+     *
+     * Matches the call style used throughout the package's views:
+     *   Gsmui::classes()->add('block')->add('rounded-xl')
      */
-    public static function classes(string $component): array
+    public static function classes(?string $component = null): ClassBuilder
     {
-        $defaults = static::getComponentDefaults($component);
+        $builder = new ClassBuilder();
 
-        return array_merge($defaults, static::getComponentOverrides($component));
+        if ($component !== null) {
+            $builder->merge(static::flattenClasses(static::getComponentDefaults($component)));
+            $builder->merge(static::flattenClasses(static::getComponentOverrides($component)));
+        }
+
+        return $builder;
+    }
+
+    /**
+     * Flatten a nested defaults array into a flat list of class strings.
+     *
+     * Class tables are authored as `['base' => '...', 'primary' => '...']`,
+     * so only the string values matter here.
+     */
+    protected static function flattenClasses(array $classes): array
+    {
+        $flat = [];
+
+        array_walk_recursive($classes, function ($value) use (&$flat) {
+            if (is_string($value) && trim($value) !== '') {
+                $flat[] = trim($value);
+            }
+        });
+
+        return $flat;
+    }
+
+    /**
+     * Split off the attributes that start with a given prefix.
+     *
+     * Returns a bag containing only the prefixed attributes, with the prefix
+     * stripped, so a component can forward `container:class="..."` onward.
+     */
+    public static function attributesAfter(string $prefix, mixed $attributes): \Illuminate\View\ComponentAttributeBag
+    {
+        $bag = $attributes instanceof \Illuminate\View\ComponentAttributeBag
+            ? $attributes->getAttributes()
+            : (array) $attributes;
+
+        $matching = [];
+
+        foreach ($bag as $key => $value) {
+            if (str_starts_with($key, $prefix)) {
+                $matching[substr($key, strlen($prefix))] = $value;
+            }
+        }
+
+        return new \Illuminate\View\ComponentAttributeBag($matching);
+    }
+
+    /**
+     * Get default classes for a component as a flat string.
+     */
+    public static function classList(string $component): string
+    {
+        return (string) static::classes($component);
     }
 
     /**
