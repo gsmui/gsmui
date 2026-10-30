@@ -1,0 +1,27 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::create('theme_variations', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('theme_id')->constrained('themes');
+            $table->string('name');
+            $table->json('tokens');
+            $table->boolean('is_default')->default(false);
+            $table->timestamps();
+
+            $table->index(['theme_id', 'is_default']);
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('theme_variations');
+    }
+};

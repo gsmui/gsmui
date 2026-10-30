@@ -1,84 +1,71 @@
 {
-    "name": "gsmui/gsmui-pro",
-    "description": "The pro version of Gsmui, the official UI component library for Livewire. 200+ premium components with dark mode, CSP support, and comprehensive theming.",
-    "keywords": ["gsmui", "laravel", "livewire", "components", "ui", "dark-mode", "csp", "tailwind"],
+    "name": "gsmui/platform",
+    "type": "project",
+    "description": "GsmUi - The complete Laravel UI ecosystem platform",
+    "keywords": ["laravel", "livewire", "ui", "components", "templates", "marketplace"],
     "license": "proprietary",
-    "authors": [
-        {
-            "name": "Md Shamim Hossain",
-            "email": "shamimstack@gmail.com"
-        }
-    ],
     "require": {
-        "php": "^8.1",
-        "illuminate/console": "^10.0|^11.0|^12.0",
-        "illuminate/support": "^10.0|^11.0|^12.0",
-        "illuminate/view": "^10.0|^11.0|^12.0",
-        "livewire/livewire": "^3.0"
+        "php": "^8.5",
+        "laravel/fortify": "^1.25",
+        "laravel/framework": "^12.0",
+        "laravel/sanctum": "^4.0",
+        "laravel/tinker": "^2.10",
+        "livewire/livewire": "^3.6",
+        "predis/predis": "^2.3",
+        "spatie/laravel-activitylog": "^5.1",
+        "spatie/laravel-medialibrary": "^11.23",
+        "spatie/laravel-permission": "^6.17"
     },
     "require-dev": {
-        "orchestra/testbench": "^9.0",
-        "phpunit/phpunit": "^11.0",
-        "laravel/pint": "^1.0"
-    },
-    "config": {
-        "sort-packages": true,
-        "allow-plugins": {
-            "pestphp/pest-plugin": true
-        },
-        "policy": {
-            "advisories": {
-                "block": false
-            }
-        }
+        "fakerphp/faker": "^1.23",
+        "laravel/pint": "^1.28",
+        "laravel/sail": "^1.36",
+        "mockery/mockery": "^1.6",
+        "nunomaduro/collision": "^8.6",
+        "phpunit/phpunit": "^11.1"
     },
     "autoload": {
         "psr-4": {
-            "GsmuiPro\\": "src/"
-        },
-        "files": [
-            "src/helpers.php"
-        ]
+            "App\\": "app/",
+            "Database\\Factories\\": "database/factories/",
+            "Database\\Seeders\\": "database/seeders/"
+        }
     },
     "autoload-dev": {
         "psr-4": {
-            "GsmuiPro\\Tests\\": "tests/",
-            "App\\": "workbench/app/"
-        }
-    },
-    "extra": {
-        "laravel": {
-            "providers": [
-                "GsmuiPro\\GsmuiProServiceProvider"
-            ],
-            "aliases": {
-                "GsmuiPro": "GsmuiPro\\GsmuiPro"
-            }
+            "Tests\\": "tests/"
         }
     },
     "scripts": {
-        "test": "vendor/bin/phpunit",
-        "test-coverage": "vendor/bin/phpunit --coverage-html coverage",
-        "test:smoke": [
-            "Composer\\Config::disableProcessTimeout",
-            "@php scripts/run-smoke.php --strict"
+        "post-autoload-dump": [
+            "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
+            "@php artisan package:discover --ansi"
         ],
-        "manifest": "@php scripts/build-component-manifest.php",
-        "ledger": "@php scripts/prd-ledger.php",
-        "docs:build": [
-            "@manifest",
-            "@php scripts/run-smoke.php",
-            "@ledger"
+        "post-update-cmd": [
+            "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
         ],
-        "lint": "vendor/bin/php-cs-fixer fix --dry-run --diff",
-        "format": "vendor/bin/php-cs-fixer fix",
-        "analyse": "vendor/bin/phpstan analyse",
-        "serve": [
-            "Composer\\Config::disableProcessTimeout",
-            "@php vendor/bin/testbench serve --port=3000"
+        "post-root-package-install": [
+            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+        ],
+        "post-create-project-cmd": [
+            "@php artisan key:generate --ansi",
+            "@php -r \"file_exists('database/database.sqlite') || touch('database/database.sqlite');\"",
+            "@php artisan migrate --graceful --ansi"
         ]
     },
-
+    "extra": {
+        "laravel": {
+            "dont-discover": []
+        }
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    },
     "minimum-stability": "stable",
     "prefer-stable": true
 }

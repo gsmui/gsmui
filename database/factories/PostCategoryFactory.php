@@ -1,0 +1,25 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Database\Factories;
+
+use App\Domains\Blog\Models\PostCategory;
+use Illuminate\Database\Eloquent\Factories\Factory;
+
+class PostCategoryFactory extends Factory
+{
+    protected $model = PostCategory::class;
+
+    public function definition(): array
+    {
+        $name = fake()->unique()->words(2, true);
+
+        return [
+            'name' => $name,
+            'slug' => \Illuminate\Support\Str::slug($name),
+            'description' => fake()->sentence(),
+            'sort_order' => fake()->numberBetween(1, 20),
+        ];
+    }
+}
